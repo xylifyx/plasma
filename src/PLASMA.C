@@ -1,5 +1,5 @@
 /*
-	Plasma by Jan M›ller & Erik Hansen.
+	Plasma by Jan MÃ¸ller & Erik Hansen.
 
 	   It was compiled in Borland c++, in ANSI mode, using the HUGE memory model.
 	Feel free to use it as you desire, you may even name it after your
