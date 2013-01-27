@@ -7,7 +7,7 @@ import java.awt.image.DataBufferByte;
 import java.awt.image.IndexColorModel;
 import java.awt.image.WritableRaster;
 
-public class PlasmaCalculations {
+public final class PlasmaCalculations {
 	int box_w, box_h;
 	private BufferedImage image;
 	private double factor;
@@ -26,17 +26,17 @@ public class PlasmaCalculations {
 
 		this.image = new BufferedImage(box_w, box_h,
 				BufferedImage.TYPE_BYTE_INDEXED);
+		double metafactor = 0.5;
+		factor = metafactor * 520d / (double) (box_w + box_h);
 		this.distTable = calculateDistTable();
 		this.sinusTable = calculateSinusTable();
 
-		double metafactor = 0.5;
-		factor = metafactor * 520d / (double) (box_w + box_h);
 	}
 
 	private byte[][] calculateDistTable() {
 		byte[][] tab = new byte[box_h][box_w];
 		for (int i = 0; i < box_h; i++) {
-			tab[i] = new byte[box_w];
+			// tab[i] = new byte[box_w];
 			for (int j = 0; j < box_w; j++) {
 				int v = (int) (dist(factor, 0, 0, j, i));
 				tab[i][j] = (byte) v;
@@ -48,7 +48,7 @@ public class PlasmaCalculations {
 	private byte[][] calculateSinusTable() {
 		byte[][] tab = new byte[box_h][box_w];
 		for (int i = 0; i < box_h; i++) {
-			tab[i] = new byte[box_w];
+			// tab[i] = new byte[box_w];
 			for (int j = 0; j < box_w; j++) {
 				int v = (int) sindist(factor, 0, 0, j, i);
 				tab[i][j] = (byte) v;
@@ -87,29 +87,27 @@ public class PlasmaCalculations {
 		double roll = tick * 5;
 		double h = box_h;
 		double w = box_w;
-		int x2 = (int) ((w / 2d) + (w / 2d) * sin(circle1));
-		int y2 = (int) ((h / 2d) + (h / 2d) * cos(circle2));
 		int x1 = (int) ((w / 2d) + (w / 2d) * cos(circle3));
 		int y1 = (int) ((h / 2d) + (h / 2d) * sin(circle4));
+		int x2 = (int) ((w / 2d) + (w / 2d) * sin(circle1));
+		int y2 = (int) ((h / 2d) + (h / 2d) * cos(circle2));
 		int x3 = (int) ((w / 2d) + (w / 2d) * cos(circle5));
 		int y3 = (int) ((h / 2d) + (h / 2d) * sin(circle6));
 		int x4 = (int) ((w / 2d) + (w / 2d) * cos(circle7));
 		int y4 = (int) ((h / 2d) + (h / 2d) * sin(circle8));
 
-		CalculateBody(data, x1, y1, x2, y2, x3, y3, x4, y4, (int) roll);
+		CalculateBody2(data, x1, y1, x2, y2, x3, y3, x4, y4, (int) roll);
 	}
 
-	void CalculateBodyNoTable(byte[] body, int x1, int y1, int x2, int y2,
+	void CalculateBody2(byte[] body, int x1, int y1, int x2, int y2,
 			int x3, int y3, int x4, int y4, int roll) {
 
 		for (int i = 0; i < box_h; i++) {
 			int k = i * box_w;
 			for (int j = 0; j < box_w; j++) {
 				// this is the heart of the plasma
-				double d = dist(factor, x1, y1, j, i)
-						+ sindist(factor, x2, y2, j, i)
-						+ sindist(factor, x3, y3, j, i)
-						+ sindist(factor, x4, y4, j, i);
+				int d = dist2(x1, y1, j, i) + sindist2(x2, y2, j, i)
+						+ sindist2(x3, y3, j, i) + sindist2(x4, y4, j, i);
 				body[k + j] = (byte) d;
 			}
 		}
@@ -131,8 +129,16 @@ public class PlasmaCalculations {
 		}
 	}
 
-	private static double sindist(double factor, double x1, double y1, double x2,
-			double y2) {
+	private final byte sindist2(int x1, int y1, int x2, int y2) {
+		return sinusTable[Math.abs(y1 - y2)][Math.abs(x1 - x2)];
+	}
+
+	private final byte dist2(int x1, int y1, int x2, int y2) {
+		return distTable[Math.abs(y1 - y2)][Math.abs(x1 - x2)];
+	}
+
+	private static double sindist(double factor, double x1, double y1,
+			double x2, double y2) {
 		double d = dist(factor, x1, y1, x2, y2);
 		return (sin(d / 9.5) + 1) * 90;
 	}
@@ -141,7 +147,9 @@ public class PlasmaCalculations {
 			double y2) {
 		double dx = x1 - x2;
 		double dy = y1 - y2;
-		return factor * (sqrt(16 + dx * dx + dy * dy) - 4);
+		double f1 = factor*20;
+		double f2 = f1*f1;
+		return factor * (sqrt(f2 + dx * dx + dy * dy) - f1);
 	}
 
 }
