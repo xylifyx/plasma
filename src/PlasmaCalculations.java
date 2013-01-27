@@ -10,9 +10,8 @@ import java.awt.image.WritableRaster;
 public class PlasmaCalculations {
 	int box_w, box_h;
 	private BufferedImage image;
-	private short[] tab1;
-	private short[] tab2;
 	private IndexColorModel palette;
+	private double factor;
 
 	public PlasmaCalculations(int width, int height) {
 		super();
@@ -27,19 +26,14 @@ public class PlasmaCalculations {
 		this.image = new BufferedImage(box_w, box_h,
 				BufferedImage.TYPE_BYTE_INDEXED);
 
-		tab1 = new short[4 * box_w * box_h];
-		CalcTab1();
-		tab2 = new short[4 * box_w * box_h];
-		CalcTab2();
-		
+		double metafactor = 0.5;
+		factor = metafactor * 520d / (double) (box_w + box_h);
 		palette = ColorPalette.genPalette(10);
 	}
 
 	private BufferedImage genFrameImage(long millis) {
 		// palette = ColorPalette.genPalette((int) (millis / 100d));
-		return new BufferedImage(
-				palette,
-				image.getRaster(), false, null);
+		return new BufferedImage(palette, image.getRaster(), false, null);
 	}
 
 	public BufferedImage genFrame(long millis) {
@@ -52,7 +46,7 @@ public class PlasmaCalculations {
 	}
 
 	private void updateData(byte[] data, double millis) {
-		double tick = (millis / 10000.0);
+		double tick = (millis / 100.0);
 
 		double circle1 = tick * 0.085 / 6d;
 		double circle2 = -tick * 0.1 / 6d;
@@ -81,55 +75,30 @@ public class PlasmaCalculations {
 	void CalculateBody(byte[] body, int x1, int y1, int x2, int y2, int x3,
 			int y3, int x4, int y4, int roll) {
 
-		System.out.println(x1 + "," + y1 + " " + x2 + "," + y2 + " " + x3 + ","
-				+ y3 + " - " + roll);
-
 		for (int i = 0; i < box_h; i++) {
 			int k = i * box_w;
 			for (int j = 0; j < box_w; j++) {
 				// this is the heart of the plasma
-				body[k + j] = (byte) (//
-				tab1[box_w * (i + y1) + j + x1] + roll
-						+ tab2[box_w * (i + y2) + j + x2]
-						+ tab2[box_w * (i + y3) + j + x3] + //
-				tab2[box_w * (i + y4) + j + x4]);
+				double d = dist(x1, y1, j, i) * factor
+						+ sindist(factor, x2, y2, j, i)
+						+ sindist(factor, x3, y3, j, i)
+						+ sindist(factor, x4, y4, j, i);
+				body[k + j] = (byte) d;
 			}
 		}
 	}
 
-	double metafactor = 0.5;
-
-	void CalcTab1() // calculate table 1 for plasma
-	{
-		int i = 0, j = 0;
-		double factor = metafactor * 5d * 520d / (double) (box_w + box_h);
-		while (i < box_h * 2) {
-			j = 0;
-			while (j < box_w * 2) {
-				tab1[(i * box_w * 2) + j] = (byte) ((sqrt(16.0 + (box_h - i)
-						* (box_h - i) + (box_w - j) * (box_w - j)) - 4) * factor);
-				j++;
-			}
-			i++;
-		}
+	private static double sindist(double factor, double x1, double y1,
+			double x2, double y2) {
+		double d = dist(x1, y1, x2, y2) * factor;
+		System.out.println(d+" "+factor);
+		return (sin(d / 9.5) + 1) * 90;
 	}
 
-	void CalcTab2() // calculate table 2 for plasma
-	{
-		int i = 0, j = 0;
-		double temp;
-		double factor = metafactor * 520d / (double) (box_w + box_h);
-		while (i < box_h * 2) {
-			j = 0;
-			while (j < box_w * 2) {
-				temp = (sqrt(16.0 + (box_h - i) * (box_h - i) + (box_w - j)
-						* (box_w - j)) - 4)
-						* factor;
-				tab2[(i * box_w * 2) + j] = (byte) ((sin(temp / 9.5) + 1) * 90);
-				// tab2[(i*box_w*2)+j]=(sin(sqrt((box_h-i)*(box_h-i)+(box_w-j)*(box_w-j))/9.5)+1)*90;
-				j++;
-			}
-			i++;
-		}
+	private static double dist(double x1, double y1, double x2, double y2) {
+		double dx = x1 - x2;
+		double dy = y1 - y2;
+		return sqrt(16 + dx * dx + dy * dy) - 4;
 	}
+
 }

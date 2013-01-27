@@ -86,9 +86,11 @@ public class AnimationComponent extends JComponent {
 				nextAnimationFrame();
 			}
 		};
-		timer.schedule(task, 100, 100);
+		timer.schedule(task, delay, delay);
 	}
 
+	protected long delay = 25;
+	
 	private void stop() {
 		if (task != null)
 			task.cancel();

@@ -9,6 +9,7 @@ public class PlasmaAnimation extends AnimationComponent {
 
 	public PlasmaAnimation(int width, int height) {
 		super(width, height);
+		delay = 25;
 	}
 
 	PlasmaCalculations image;
