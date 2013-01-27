@@ -1,12 +1,17 @@
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.GraphicsDevice;
+import java.awt.Toolkit;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
 @SuppressWarnings("serial")
@@ -27,7 +32,33 @@ public class AnimationComponent extends JComponent {
 			}
 
 		});
+
+		addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() > 1) {
+					doubleClick();
+				}
+			}
+
+		});
 		this.dt = System.currentTimeMillis();
+	}
+
+	boolean fullscreen;
+
+	private void doubleClick() {
+		JFrame f = (JFrame) SwingUtilities
+				.getWindowAncestor(AnimationComponent.this);
+		GraphicsDevice device = f.getGraphicsConfiguration().getDevice();
+		if (fullscreen == false) {
+			fullscreen = true;
+			device.setFullScreenWindow(f);
+		} else {
+			fullscreen = false;
+			device.setFullScreenWindow(null);
+		}
 	}
 
 	@Override
@@ -90,7 +121,7 @@ public class AnimationComponent extends JComponent {
 	}
 
 	protected long delay = 25;
-	
+
 	private void stop() {
 		if (task != null)
 			task.cancel();

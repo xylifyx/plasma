@@ -26,7 +26,7 @@ public final class PlasmaCalculations {
 
 		this.image = new BufferedImage(box_w, box_h,
 				BufferedImage.TYPE_BYTE_INDEXED);
-		double metafactor = 0.5;
+		double metafactor = 0.4;
 		factor = metafactor * 520d / (double) (box_w + box_h);
 		this.distTable = calculateDistTable();
 		this.sinusTable = calculateSinusTable();
@@ -147,7 +147,7 @@ public final class PlasmaCalculations {
 			double y2) {
 		double dx = x1 - x2;
 		double dy = y1 - y2;
-		double f1 = factor*20;
+		double f1 = 20/factor;
 		double f2 = f1*f1;
 		return factor * (sqrt(f2 + dx * dx + dy * dy) - f1);
 	}
