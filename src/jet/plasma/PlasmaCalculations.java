@@ -25,15 +25,14 @@ public final class PlasmaCalculations {
 	}
 
 	private void init() {
-		System.out.println("pre calculate");
-
+		long t = System.currentTimeMillis();
 		this.image = new BufferedImage(box_w, box_h,
 				BufferedImage.TYPE_BYTE_INDEXED);
 		double metafactor = 0.4;
 		factor = metafactor * 520d / (double) (box_w + box_h);
 		this.distTable = calculateDistTable();
 		this.sinusTable = calculateSinusTable();
-
+		System.out.println("Calculated tables of size "+box_w+"x"+box_h+" in "+(0.001*(System.currentTimeMillis()-t))+ "ms");
 	}
 
 	private byte[][] calculateDistTable() {

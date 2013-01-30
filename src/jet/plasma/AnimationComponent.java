@@ -120,7 +120,7 @@ public class AnimationComponent extends JComponent {
 		};
 		timer.schedule(task, delay, delay);
 	}
-	protected long delay = 25;
+	protected long delay = 10;
 
 	private void stop() {
 		if (task != null) {
