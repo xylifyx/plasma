@@ -1,8 +1,7 @@
+package jet.plasma;
+
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.lang.reflect.InvocationTargetException;
-
-import javax.swing.SwingUtilities;
 
 @SuppressWarnings("serial")
 public class PlasmaAnimation extends AnimationComponent {
@@ -27,6 +26,7 @@ public class PlasmaAnimation extends AnimationComponent {
 					
 	}
 	
+	@Override
 	public void paint(Graphics g) {
 		g.drawImage(currentFrame, 0, 0, PlasmaAnimation.this);
 	}

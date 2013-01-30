@@ -1,7 +1,8 @@
-import static java.lang.Math.PI;
-import static java.lang.Math.cos;
+package jet.plasma;
 
 import java.awt.image.IndexColorModel;
+import static java.lang.Math.PI;
+import static java.lang.Math.cos;
 
 public class ColorPalette {
 	private final static double pi = PI;
@@ -17,7 +18,7 @@ public class ColorPalette {
 	}
 
 	private static int mycol(double u, double a) {
-		return (int) ((cos((u) + (a)) + 1) * 31);
+		return (int) ((cos((u) + (a)) + 1) * 127);
 	}
 
 	public static IndexColorModel genPalette(int tick) {

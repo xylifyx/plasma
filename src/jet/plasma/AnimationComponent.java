@@ -1,3 +1,5 @@
+package jet.plasma;
+
 
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -9,7 +11,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -45,14 +46,15 @@ public class AnimationComponent extends JComponent {
 		this.dt = System.currentTimeMillis();
 	}
 	boolean fullscreen;
+	GraphicsDevice device;
 
 	private void doubleClick() {
 		JFrame f = (JFrame) SwingUtilities
 				.getWindowAncestor(AnimationComponent.this);
-		GraphicsDevice device = f.getGraphicsConfiguration().getDevice();
 		if (fullscreen == false) {
 			fullscreen = true;
 			oldBounds = f.getBounds();
+			device = f.getGraphicsConfiguration().getDevice();
 			device.setFullScreenWindow(f);
 		} else {
 			fullscreen = false;

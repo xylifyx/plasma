@@ -1,13 +1,16 @@
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
-import static java.lang.Math.sqrt;
+package jet.plasma;
+
 
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.awt.image.IndexColorModel;
 import java.awt.image.WritableRaster;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
+import static java.lang.Math.sqrt;
 
 public final class PlasmaCalculations {
+
 	int box_w, box_h;
 	private BufferedImage image;
 	private double factor;
@@ -129,11 +132,11 @@ public final class PlasmaCalculations {
 		}
 	}
 
-	private final byte sindist2(int x1, int y1, int x2, int y2) {
+	private byte sindist2(int x1, int y1, int x2, int y2) {
 		return sinusTable[Math.abs(y1 - y2)][Math.abs(x1 - x2)];
 	}
 
-	private final byte dist2(int x1, int y1, int x2, int y2) {
+	private byte dist2(int x1, int y1, int x2, int y2) {
 		return distTable[Math.abs(y1 - y2)][Math.abs(x1 - x2)];
 	}
 
@@ -147,9 +150,8 @@ public final class PlasmaCalculations {
 			double y2) {
 		double dx = x1 - x2;
 		double dy = y1 - y2;
-		double f1 = 20/factor;
-		double f2 = f1*f1;
+		double f1 = 20 / factor;
+		double f2 = f1 * f1;
 		return factor * (sqrt(f2 + dx * dx + dy * dy) - f1);
 	}
-
 }
