@@ -20,16 +20,16 @@ public class PlasmaAnimation extends AnimationComponent {
 
 	@Override
 	protected void paintAnimationFrame(long millis) {
-		currentFrame = image.genFrame(millis);
-		//repaint();
-		paintNow();
+		currentFrame = image.generateFrameImage(millis);
+		repaint();
+		// paintNow();
 	}
 
-	private void paintNow() {
-		final Graphics g = getGraphics();
+	@Override
+	public void paint(Graphics g) {
 		paintNow(g);
-		g.dispose();
 	}
+
 	long t = System.currentTimeMillis();
 	int frameCount = 0;
 

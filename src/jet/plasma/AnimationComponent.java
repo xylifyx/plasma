@@ -151,5 +151,6 @@ public class AnimationComponent extends JComponent {
 		f.pack();
 		f.setLocationByPlatform(true);
 		f.setVisible(true);
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 }
