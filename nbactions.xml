@@ -7,7 +7,7 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.2:exec</goal>
             </goals>
             <properties>
-                <exec.args>-classpath %classpath jet.plasma.PlasmaAnimation</exec.args>
+                <exec.args>-XstartOnFirstThread -classpath %classpath jet.plasma.PlasmaAnimation</exec.args>
                 <exec.executable>java</exec.executable>
                 <exec.classpathScope>runtime</exec.classpathScope>
             </properties>
@@ -24,5 +24,12 @@
                 <exec.classpathScope>runtime</exec.classpathScope>
                 <jpda.listen>true</jpda.listen>
             </properties>
+        </action>
+        <action>
+            <actionName>CUSTOM-site</actionName>
+            <displayName>site</displayName>
+            <goals>
+                <goal>site</goal>
+            </goals>
         </action>
     </actions>

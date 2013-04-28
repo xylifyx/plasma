@@ -59,7 +59,7 @@ public class AnimationComponent extends JComponent {
 		} else {
 			fullscreen = false;
 			try {
-				device.setFullScreenWindow(null);
+				f.getGraphicsConfiguration().getDevice().setFullScreenWindow(null);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -88,6 +88,7 @@ public class AnimationComponent extends JComponent {
 				return null;
 			}
 
+			@Override
 			public void done() {
 				if (isVisible()) {
 					start();
@@ -150,7 +151,7 @@ public class AnimationComponent extends JComponent {
 		f.getContentPane().add(this);
 		f.pack();
 		f.setLocationByPlatform(true);
-		f.setVisible(true);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		f.setVisible(true);
 	}
 }
